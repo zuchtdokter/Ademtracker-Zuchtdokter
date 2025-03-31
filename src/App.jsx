@@ -7,6 +7,7 @@ import SleepBreathTracker from './components/SleepBreathTracker';
 import TherapistDashboard from './components/TherapistDashboard';
 import Login from './components/Login';
 import Register from './components/Register';
+import './index.css';
 
 const theme = createTheme({
   palette: {
