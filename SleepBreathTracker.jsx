@@ -149,6 +149,13 @@ export default function SleepBreathTracker() {
   };
 
   return (
+    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+  <img
+    src="/Zuchtdokter logo-04.png"
+    alt="Zuchtdokter logo"
+    style={{ maxWidth: '180px', height: 'auto' }}
+  />
+</div>
     <Box sx={{ p: 4, maxWidth: 600, mx: "auto" }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4" component="h1">
