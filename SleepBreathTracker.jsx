@@ -32,15 +32,6 @@ export default function SleepBreathTracker() {
     wakeCount: 0,
     awakeDuration: 0,
     inputExercises: "",
-    // TODO:
-    // - Toevoegen van grafieken voor visualisatie van trends
-    // - Implementeren van statistieken over tijd
-    // - Toevoegen van herinneringen/notificaties
-    // - Exporteren van data naar CSV/PDF
-    // - Synchronisatie met cloud opslag
-    // - Toevoegen van weekoverzicht
-    // - Verbeteren van validatie logica
-    // - Toevoegen van gebruikersprofielen
   });
 
   const [snackbar, setSnackbar] = useState({
@@ -53,7 +44,6 @@ export default function SleepBreathTracker() {
     const savedData = localStorage.getItem("sleepBreathData");
     if (savedData) {
       const parsedData = JSON.parse(savedData);
-      // Alleen data van vandaag laden
       if (parsedData.date === formData.date) {
         setFormData(parsedData);
       }
@@ -66,19 +56,11 @@ export default function SleepBreathTracker() {
 
   const validateForm = () => {
     if (!formData.stressLevel || formData.stressLevel === "---") {
-      setSnackbar({
-        open: true,
-        message: "Vul een stressniveau in",
-        severity: "error"
-      });
+      setSnackbar({ open: true, message: "Vul een stressniveau in", severity: "error" });
       return false;
     }
     if (!formData.sunlightExposure || formData.sunlightExposure === "---") {
-      setSnackbar({
-        open: true,
-        message: "Vul de blootstelling aan zonlicht in",
-        severity: "error"
-      });
+      setSnackbar({ open: true, message: "Vul de blootstelling aan zonlicht in", severity: "error" });
       return false;
     }
     return true;
@@ -87,13 +69,8 @@ export default function SleepBreathTracker() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-
     localStorage.setItem("sleepBreathData", JSON.stringify(formData));
-    setSnackbar({
-      open: true,
-      message: "Data succesvol opgeslagen!",
-      severity: "success"
-    });
+    setSnackbar({ open: true, message: "Data succesvol opgeslagen!", severity: "success" });
   };
 
   const handleDelete = () => {
@@ -113,11 +90,7 @@ export default function SleepBreathTracker() {
         awakeDuration: 0,
         inputExercises: "",
       });
-      setSnackbar({
-        open: true,
-        message: "Registratie verwijderd",
-        severity: "info"
-      });
+      setSnackbar({ open: true, message: "Registratie verwijderd", severity: "info" });
     }
   };
 
@@ -137,192 +110,184 @@ export default function SleepBreathTracker() {
 
   const getSliderColor = (value, field) => {
     switch (field) {
-      case 'sleepDuration':
-        return value < 6 ? 'error' : value < 8 ? 'warning' : 'success';
-      case 'wakeCount':
-        return value > 3 ? 'error' : value > 1 ? 'warning' : 'success';
-      case 'awakeDuration':
-        return value > 30 ? 'error' : value > 15 ? 'warning' : 'success';
-      default:
-        return 'primary';
+      case 'sleepDuration': return value < 6 ? 'error' : value < 8 ? 'warning' : 'success';
+      case 'wakeCount': return value > 3 ? 'error' : value > 1 ? 'warning' : 'success';
+      case 'awakeDuration': return value > 30 ? 'error' : value > 15 ? 'warning' : 'success';
+      default: return 'primary';
     }
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
-  <img
-    src="/Zuchtdokter logo-04.png"
-    alt="Zuchtdokter logo"
-    style={{ maxWidth: '180px', height: 'auto' }}
-  />
-</div>
-    <Box sx={{ p: 4, maxWidth: 600, mx: "auto" }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h4" component="h1">
-          Slaap- en Ademtracker
-        </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
-          {format(new Date(formData.date), 'd MMMM yyyy', { locale: nl })}
-        </Typography>
-      </Box>
-      
-      <form onSubmit={handleSubmit}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-          <FormControl fullWidth required>
-            <InputLabel>Stressniveau vandaag</InputLabel>
-            <Select
-              value={formData.stressLevel}
-              label="Stressniveau vandaag"
-              onChange={(e) => handleChange("stressLevel", e.target.value)}
-            >
-              {levelOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+    <>
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+        <img
+          src="/Zuchtdokter logo-04.png"
+          alt="Zuchtdokter logo"
+          style={{ maxWidth: '180px', height: 'auto' }}
+        />
+      </div>
 
-          <FormControl fullWidth required>
-            <InputLabel>Blootstelling aan zonlicht</InputLabel>
-            <Select
-              value={formData.sunlightExposure}
-              label="Blootstelling aan zonlicht"
-              onChange={(e) => handleChange("sunlightExposure", e.target.value)}
-            >
-              {levelOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+      <Box sx={{ p: 4, maxWidth: 600, mx: "auto" }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+          <Typography variant="h4">Slaap- en Ademtracker</Typography>
+          <Typography variant="subtitle1" color="text.secondary">
+            {format(new Date(formData.date), 'd MMMM yyyy', { locale: nl })}
+          </Typography>
+        </Box>
 
-          {[
-            ["screenTime", "Geen schermtijd"],
-            ["foodTime", "Geen eten"],
-            ["alcoholTime", "Geen alcohol"],
-            ["activityTime", "Geen fysieke inspanning"],
-          ].map(([key, label]) => (
-            <FormControl key={key} fullWidth>
-              <InputLabel>{label} voor het slapen</InputLabel>
+        <form onSubmit={handleSubmit}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+            <FormControl fullWidth required>
+              <InputLabel>Stressniveau vandaag</InputLabel>
               <Select
-                value={formData[key]}
-                label={label}
-                onChange={(e) => handleChange(key, e.target.value)}
+                value={formData.stressLevel}
+                onChange={(e) => handleChange("stressLevel", e.target.value)}
               >
-                {timeOptions.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
+                {levelOptions.map((o) => (
+                  <MenuItem key={o.value} value={o.value}>{o.label}</MenuItem>
                 ))}
               </Select>
             </FormControl>
-          ))}
 
-          <FormControl fullWidth>
-            <InputLabel>Wandeling gemaakt voor het slapen?</InputLabel>
-            <Select
-              value={formData.eveningWalk}
-              label="Wandeling gemaakt voor het slapen?"
-              onChange={(e) => handleChange("eveningWalk", e.target.value)}
-            >
-              <MenuItem value="---">---</MenuItem>
-              <MenuItem value="Ja">Ja</MenuItem>
-              <MenuItem value="Nee">Nee</MenuItem>
-            </Select>
-          </FormControl>
-
-          <Box>
-            <Typography gutterBottom>
-              Hoe lang heb je geslapen? ({formData.sleepDuration} uur)
-            </Typography>
-            <Slider
-              min={3}
-              max={12}
-              value={formData.sleepDuration}
-              onChange={(_, value) => handleChange("sleepDuration", value)}
-              step={0.5}
-              valueLabelDisplay="auto"
-              color={getSliderColor(formData.sleepDuration, 'sleepDuration')}
-            />
-          </Box>
-
-          <Box>
-            <Typography gutterBottom>
-              Hoe vaak werd je wakker? ({formData.wakeCount}x)
-            </Typography>
-            <Slider
-              min={0}
-              max={10}
-              value={formData.wakeCount}
-              onChange={(_, value) => handleChange("wakeCount", value)}
-              step={1}
-              valueLabelDisplay="auto"
-              color={getSliderColor(formData.wakeCount, 'wakeCount')}
-            />
-          </Box>
-
-          <Box>
-            <Typography gutterBottom>
-              Hoe lang lag je wakker? ({formData.awakeDuration} min)
-            </Typography>
-            <Slider
-              min={0}
-              max={60}
-              value={formData.awakeDuration}
-              onChange={(_, value) => handleChange("awakeDuration", value)}
-              step={5}
-              valueLabelDisplay="auto"
-              color={getSliderColor(formData.awakeDuration, 'awakeDuration')}
-            />
-          </Box>
-
-          <TextField
-            fullWidth
-            multiline
-            rows={4}
-            label="Input oefeningen (ademwerk, meditatie, etc)"
-            value={formData.inputExercises}
-            onChange={(e) => handleChange("inputExercises", e.target.value)}
-          />
-
-          <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              size="large"
-              sx={{ flex: 1 }}
-            >
-              Opslaan
-            </Button>
-            <Tooltip title="Verwijder registratie">
-              <IconButton 
-                color="error" 
-                onClick={handleDelete}
-                sx={{ border: 1, borderColor: 'error.main' }}
+            <FormControl fullWidth required>
+              <InputLabel>Blootstelling aan zonlicht</InputLabel>
+              <Select
+                value={formData.sunlightExposure}
+                onChange={(e) => handleChange("sunlightExposure", e.target.value)}
               >
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        </Box>
-      </form>
+                {levelOptions.map((o) => (
+                  <MenuItem key={o.value} value={o.value}>{o.label}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-      <Snackbar 
-        open={snackbar.open} 
-        autoHideDuration={6000} 
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
-      >
-        <Alert 
-          onClose={() => setSnackbar({ ...snackbar, open: false })} 
-          severity={snackbar.severity}
-          sx={{ width: '100%' }}
+            {["screenTime", "foodTime", "alcoholTime", "activityTime"].map((key) => (
+              <FormControl key={key} fullWidth>
+                <InputLabel>{`Geen ${key.replace("Time", "")} voor het slapen`}</InputLabel>
+                <Select
+                  value={formData[key]}
+                  onChange={(e) => handleChange(key, e.target.value)}
+                >
+                  {timeOptions.map((o) => (
+                    <MenuItem key={o.value} value={o.value}>{o.label}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            ))}
+
+            <FormControl fullWidth>
+              <InputLabel>Wandeling gemaakt voor het slapen?</InputLabel>
+              <Select
+                value={formData.eveningWalk}
+                onChange={(e) => handleChange("eveningWalk", e.target.value)}
+              >
+                <MenuItem value="---">---</MenuItem>
+                <MenuItem value="Ja">Ja</MenuItem>
+                <MenuItem value="Nee">Nee</MenuItem>
+              </Select>
+            </FormControl>
+
+            <Box>
+              <Typography gutterBottom>
+                Hoe lang heb je geslapen? ({formData.sleepDuration} uur)
+              </Typography>
+              <Slider
+                min={3}
+                max={12}
+                step={0.5}
+                value={formData.sleepDuration}
+                onChange={(_, v) => handleChange("sleepDuration", v)}
+                valueLabelDisplay="auto"
+                color={getSliderColor(formData.sleepDuration, "sleepDuration")}
+              />
+            </Box>
+
+            <Box>
+              <Typography gutterBottom>
+                Hoe vaak werd je wakker? ({formData.wakeCount}x)
+              </Typography>
+              <Slider
+                min={0}
+                max={10}
+                value={formData.wakeCount}
+                onChange={(_, v) => handleChange("wakeCount", v)}
+                valueLabelDisplay="auto"
+                color={getSliderColor(formData.wakeCount, "wakeCount")}
+              />
+            </Box>
+
+            <Box>
+              <Typography gutterBottom>
+                Hoe lang lag je wakker? ({formData.awakeDuration} min)
+              </Typography>
+              <Slider
+                min={0}
+                max={60}
+                step={5}
+                value={formData.awakeDuration}
+                onChange={(_, v) => handleChange("awakeDuration", v)}
+                valueLabelDisplay="auto"
+                color={getSliderColor(formData.awakeDuration, "awakeDuration")}
+              />
+            </Box>
+
+            <TextField
+              fullWidth
+              multiline
+              rows={4}
+              label="Input oefeningen (ademwerk, meditatie, etc)"
+              value={formData.inputExercises}
+              onChange={(e) => handleChange("inputExercises", e.target.value)}
+            />
+
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{
+                  backgroundColor: '#A4C7E6',
+                  color: '#000',
+                  fontWeight: 'bold',
+                  borderRadius: '8px',
+                  paddingX: 4,
+                  paddingY: 1.5,
+                  '&:hover': {
+                    backgroundColor: '#CAB9E4',
+                  },
+                }}
+              >
+                Opslaan
+              </Button>
+            </Box>
+          </Box>
+        </form>
+
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          <Tooltip title="Verwijder registratie">
+            <IconButton 
+              color="error" 
+              onClick={handleDelete}
+              sx={{ border: 1, borderColor: 'error.main' }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
+
+        <Snackbar 
+          open={snackbar.open} 
+          autoHideDuration={6000} 
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
         >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
-    </Box>
+          <Alert 
+            onClose={() => setSnackbar({ ...snackbar, open: false })} 
+            severity={snackbar.severity}
+            sx={{ width: '100%' }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
+      </Box>
+    </>
   );
-} 
+}
