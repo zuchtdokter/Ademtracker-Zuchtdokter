@@ -1,0 +1,14 @@
+/* Quiche Sans lokaal importeren */
+@font-face {
+    font-family: 'Quiche Sans';
+    src: url('/QuicheSans-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  body {
+    font-family: 'Quiche Sans', sans-serif;
+    background-color: #F8F9FA;
+    margin: 0;
+    padding: 0;
+  }
